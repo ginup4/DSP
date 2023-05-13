@@ -1,0 +1,11 @@
+Debug/
+.settings/
+cmake-build-debug/
+.cproject
+.project
+.mxproject
+CMakeLiests.txt
+CmakeLists_template.txt
+"DSP Debug.launch"
+STM32H723ZGTX_FLASH.ld
+STM32H723ZGTX_RAM.ld
