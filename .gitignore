@@ -9,3 +9,9 @@ CmakeLists_template.txt
 "DSP Debug.launch"
 STM32H723ZGTX_FLASH.ld
 STM32H723ZGTX_RAM.ld
+Debug/Core/Src/main.cyclo
+*.o
+*.su
+Debug/DSP.elf
+Debug/DSP.list
+Debug/DSP.map

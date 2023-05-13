@@ -145,7 +145,7 @@ struct rotaryConfig {
 struct reverbConfig {
 	struct echoConfig filtersParams[6];
 	float dry_wet;
-	float attenuation;
+	float reverbTime;
 };
 
 struct gainConfig {
@@ -194,6 +194,11 @@ void checkForNull(void* ptr){
 	if(ptr == NULL){
 		crash(3);
 	}
+}
+
+float getReverbAttenuation(int samples, float time){
+	float t = (float) samples / sampleRate;
+	return 1 / (exp(t / time * log(1000)));
 }
 
 void loadEffects(){
@@ -278,28 +283,24 @@ void loadEffects(){
 			SAVE_EFFECT(rotary)
 
 		}else if(effectId == 10){
-//			LOAD_EFFECT(reverb)
-			struct reverbConfig reverbParams;
-			paramsLen = sizeof(struct reverbConfig);
-			memcpy(&reverbParams, effectsData + i, paramsLen);
-			reverbParams.filtersParams[0].attenuation = reverbParams.attenuation * 1;
+			LOAD_EFFECT(reverb)
+			reverbParams.filtersParams[0].attenuation = getReverbAttenuation(9601, reverbParams.reverbTime);
 			reverbParams.filtersParams[0].previousOutputsLen = 9601;
-			reverbParams.filtersParams[1].attenuation = reverbParams.attenuation * 0.987870619946;
+			reverbParams.filtersParams[1].attenuation = getReverbAttenuation(9999, reverbParams.reverbTime);
 			reverbParams.filtersParams[1].previousOutputsLen = 9999;
-			reverbParams.filtersParams[2].attenuation = reverbParams.attenuation * 0.963611859838;
+			reverbParams.filtersParams[2].attenuation = getReverbAttenuation(10799, reverbParams.reverbTime);
 			reverbParams.filtersParams[2].previousOutputsLen = 10799;
-			reverbParams.filtersParams[3].attenuation = reverbParams.attenuation * 0.93935309973;
+			reverbParams.filtersParams[3].attenuation = getReverbAttenuation(11599, reverbParams.reverbTime);
 			reverbParams.filtersParams[3].previousOutputsLen = 11599;
-			reverbParams.filtersParams[4].attenuation = reverbParams.attenuation;
+			reverbParams.filtersParams[4].attenuation = getReverbAttenuation(11599, reverbParams.reverbTime);
 			reverbParams.filtersParams[4].previousOutputsLen = 7001;
-			reverbParams.filtersParams[5].attenuation = reverbParams.attenuation;
+			reverbParams.filtersParams[5].attenuation = getReverbAttenuation(11599, reverbParams.reverbTime);
 			reverbParams.filtersParams[5].previousOutputsLen = 2333;
 			for(int i = 0; i < 6; i++){
 				reverbParams.filtersParams[i].previousOutputsPtr = (float*) calloc(reverbParams.filtersParams[i].previousOutputsLen, sizeof(float));
 				checkForNull(reverbParams.filtersParams[i].previousOutputsPtr);
 			}
-			memcpy(effectsData + i, &reverbParams, paramsLen);
-//			SAVE_EFFECT(reverb)
+			SAVE_EFFECT(reverb)
 
 		}else if(effectId == 11){
 			LOAD_EFFECT(gain)
