@@ -1,3 +1,0 @@
-C:/Users/Wiktor/STM32CubeIDE/workspace_1.12.0/DSP.zip_expanded/DSP/cmake-build-debug/CMakeFiles/DSP.elf.dir
-C:/Users/Wiktor/STM32CubeIDE/workspace_1.12.0/DSP.zip_expanded/DSP/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Wiktor/STM32CubeIDE/workspace_1.12.0/DSP.zip_expanded/DSP/cmake-build-debug/CMakeFiles/rebuild_cache.dir
