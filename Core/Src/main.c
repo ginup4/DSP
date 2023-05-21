@@ -161,6 +161,11 @@ struct fuzzConfig {
 	uint8_t dummy;
 };
 
+struct octaveConfig {
+	uint8_t *state;
+	float dry_wet;
+};
+
 const float dt = 1 / (float) sampleRate;
 unsigned long generalInputN = 0;
 
@@ -314,6 +319,12 @@ void loadEffects(){
 		}else if(effectId == 13){
 			LOAD_EFFECT(fuzz)
 
+		}else if(effectId == 14){
+			LOAD_EFFECT(octave)
+			octaveParams.state = (uint8_t*) calloc(2, sizeof(uint8_t));
+			checkForNull(octaveParams.state);
+			SAVE_EFFECT(octave)
+
 		}else{
 			crash(1);
 		}
@@ -390,6 +401,10 @@ void unloadEffects(){
 
 		}else if(effectId == 13){
 			LOAD_EFFECT(fuzz)
+
+		}else if(effectId == 14){
+			LOAD_EFFECT(octave)
+			free(octaveParams.state);
 
 		}else{
 			crash(1);
@@ -598,6 +613,23 @@ float fuzz(float d, struct fuzzConfig params){
 	}
 }
 
+float octave(float d, struct octaveConfig params){
+	if(d >= 0){
+		if(!params.state[0]){
+			params.state[1] = !params.state[1];
+		}
+		params.state[0] = 1;
+	}else{
+		params.state[0] = 0;
+	}
+
+	if(params.state[1]){
+		return (1 - params.dry_wet) * d + params.dry_wet;
+	}else{
+		return (1 - params.dry_wet) * d - params.dry_wet;
+	}
+}
+
 void applyEffects(float ch1, float ch2, int codecBufferInd){
 	int i = 0;
 	int effectId;
@@ -662,6 +694,9 @@ void applyEffects(float ch1, float ch2, int codecBufferInd){
 
 		}else if(effectId == 13){
 			EXECUTE_EFFECT(fuzz)
+
+		}else if(effectId == 14){
+			EXECUTE_EFFECT(octave)
 
 		}else{
 			crash(1);
