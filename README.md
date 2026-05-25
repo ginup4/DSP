@@ -1,0 +1,1 @@
+Projekt do portfolio urządzenia embedded do przetwarzania sygnału audio gitary elektrycznej w czasie rzeczywistym oparty o mikrokontroler STM32. System umożliwia programowanie i konfigurację efektów audio przez USB oraz wykorzystuje techniki Digital Signal Processing (DSP) i programowanie niskopoziomowe w języku C.
